@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.js": "/static/js/main.629f70aa.js",
+    "static/js/453.ed3810f9.chunk.js": "/static/js/453.ed3810f9.chunk.js",
+    "static/media/play-button-icon.png": "/static/media/play-button-icon.aa085afb60cf6e5da932.png",
+    "static/media/Pause-Button-Transparent.png": "/static/media/Pause-Button-Transparent.29223202fa7c2f91045b.png",
+    "static/media/reset-icon.webp": "/static/media/reset-icon.d6859285f79980134519.webp",
+    "index.html": "/index.html",
+    "main.629f70aa.js.map": "/static/js/main.629f70aa.js.map",
+    "453.ed3810f9.chunk.js.map": "/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.629f70aa.js"
+  ]
+}
