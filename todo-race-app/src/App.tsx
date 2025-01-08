@@ -109,11 +109,12 @@ function App() {
   const [started, setStarted] = useState(false);
   const [todos, setTodos] = useState<DisplayTodo[]>([]);
 
-  let winSong = new Audio("./audio/happy-logo.wav");
-  let loseSong = new Audio("./audio/violin-lose.wav");
+  
 
   //Handle Time Ending
   useEffect(() => {
+    let winSong = new Audio("./audio/happy-logo.wav");
+    let loseSong = new Audio("./audio/violin-lose.wav");
     if (todos.length !== 0) {
       if (timer === 1) {
         setWinFlags([true, false, false]);
@@ -139,7 +140,7 @@ function App() {
         loseSong.play();
       }
     }
-  }, [timer, loseSong, todos, winFlags, winSong]);
+  }, [timer, todos, winFlags]);
 
   const reset = () => {
     setWinFlags([false, false, false]);

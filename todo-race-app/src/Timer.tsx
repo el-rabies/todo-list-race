@@ -110,7 +110,7 @@ const Timer = ({ timer, setTimer, started, setStarted }: TimerProps) => {
     if (timer === 0 && started) {
       setStarted(false);
     }
-  }, [timer]);
+  }, [timer, started, setStarted]);
 
   const onReset = () => {
     setTimer(0);
