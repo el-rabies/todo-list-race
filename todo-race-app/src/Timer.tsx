@@ -102,7 +102,7 @@ const Timer = ({ timer, setTimer, started, setStarted }: TimerProps) => {
     return () => {
       clearInterval(interval);
     };
-  }, [started]);
+  }, [started, setTimer, timer]);
 
   useEffect(() => {
     setTimeString(getTimeString(timer));

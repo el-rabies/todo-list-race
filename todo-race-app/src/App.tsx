@@ -139,7 +139,7 @@ function App() {
         loseSong.play();
       }
     }
-  }, [timer]);
+  }, [timer, loseSong, todos, winFlags, winSong]);
 
   const reset = () => {
     setWinFlags([false, false, false]);
