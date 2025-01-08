@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import pauseIcon from "./icons/Pause-Button-Transparent.png";
+import playIcon from "./icons/play-button-icon.png"
+import resetIcon from "./icons/reset-icon.webp"
 
 const TimerBox = styled.div`
   display: flex;
@@ -7,8 +10,6 @@ const TimerBox = styled.div`
   align-items: center;
   justify-content: center;
   padding: 4px;
-  border-radius: 5px;
-  border: 1px solid black;
 `;
 
 const TimeContainer = styled.div`
@@ -23,20 +24,47 @@ const TimeInput = styled.input`
   padding: 0px;
   width: min-content;
   cursor: default;
-  font-family: "Times New Roman", Times, serif;
 
   &&& {
-    font-size: 24px;
+    font-size: 40px;
     font-weight: 600;
+    color: #7b7b7b;
   }
 `;
 
 const SpacerText = styled.div`
-  font-size: 24;
+  font-size: 40px;
   font-weight: 600;
+  color: #7b7b7b;
 `;
 
-const StartButton = styled.button``;
+const TimerText = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 600;
+  color: #7b7b7b;
+`
+
+const StartButton = styled.button`
+  filter: grayscale(100%) brightness(0%);
+  border: 0px;
+  background: transparent;
+`;
+
+const StopButton = styled.button`
+  filter: grayscale(100%) brightness(0%);
+  border: 0px;
+  background: transparent;
+`
+
+const ResetButton = styled.button`
+  filter: grayscale(100%) brightness(0%);
+  border: 0px;
+  background: transparent;
+`
 
 const getTimeString = (timeNum: number) => {
   let hours = Math.floor(timeNum / 3600);
@@ -49,14 +77,6 @@ const getTimeString = (timeNum: number) => {
     ":" +
     seconds.toString().padStart(2, "0")
   );
-};
-
-const getSeconds = (timeStr: string) => {
-  let hours = parseInt(timeStr.split(":")[0]);
-  let minutes = parseInt(timeStr.split(":")[1]);
-  let seconds = parseInt(timeStr.split(":")[2]);
-
-  return hours * 3600 + minutes * 60 + seconds;
 };
 
 interface TimerProps {
@@ -120,11 +140,15 @@ const Timer = ({ timer, setTimer, started, setStarted }: TimerProps) => {
   return (
     <TimerBox>
       {started ? (
-        <div>
+        <TimerText>
           {timeString}
-          <button onClick={() => setStarted(false)}>stop</button>
-          <button onClick={onReset}>reset</button>
-        </div>
+          <StopButton onClick={() => setStarted(false)}>
+          <img src={pauseIcon} height={40} width={40} alt="stop"/>
+          </StopButton>
+          <ResetButton onClick={onReset}>
+            <img src={resetIcon} height={40} width={40} alt="reset"/>
+          </ResetButton>
+        </TimerText>
       ) : (
         <TimeContainer>
           <TimeInput
@@ -153,7 +177,9 @@ const Timer = ({ timer, setTimer, started, setStarted }: TimerProps) => {
             max={60}
             min={0}
           />
-          <StartButton onClick={() => setStarted(true)}>Go!</StartButton>
+          <StartButton onClick={() => setStarted(true)}>
+            <img src={playIcon} height={40} width={40} alt="Go!"/>
+          </StartButton>
         </TimeContainer>
       )}
     </TimerBox>

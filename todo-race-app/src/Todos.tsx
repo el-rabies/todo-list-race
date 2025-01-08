@@ -9,22 +9,32 @@ export interface DisplayTodo {
 
 const TodoBox = styled.div`
   display: flex;
+  width: 90%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 16px;
 `;
 
-const TodoInput = styled.input`
-  border-radius: 5px;
-  border: 1px solid black;
-  padding: 0 4px 0 4px;
-  min-height: 25px;
+const TodoForm = styled.form`
+  display: flex;
+  flex-direction: row;
   min-width: 200px;
 
-  font-family: "Times New Roman", Times, serif;
-  font-size: 16px;
-  color: black;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+`;
+
+const TodoInput = styled.input`
+  border: 0px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 4px;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const TodoContainer = styled.div`
@@ -38,26 +48,44 @@ const TodoContainer = styled.div`
 const TodoWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  min-width: 200px;
-  padding: 4px;
-  border-radius: 10px;
-  border: 1px solid black;
+  min-width: 233px;
+  border-bottom: 1px solid lightgray;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-radius: 2px;
+  padding: 1px;
+
+  &:hover {
+    background: lightgrey;
+  }
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
 
   align-items: center;
   justify-content: flex-start;
   gap: 8px;
-
-  &:hover {
-    background-color: lightgray;
-  }
 `;
 
 const CompleteButton = styled.button<{ $filled: boolean }>`
-  border: 0.5;
-  border-radius: 25px;
-  width: 25px;
+  display: inline-block;
   height: 25px;
-  background-color: ${(props) => (props.$filled ? "black" : "transparent")};
+  width: 25px;
+  border: 1px solid #999;
+  border-radius: 3px;
+  background: ${(props) => (props.$filled ? "darkgray" : "transparent")};
+
+  &:hover {
+    background: ${(props) => (props.$filled ? "darkgray" : "lightgray")};
+  }
+`;
+
+const TodoText = styled.div`
+  width: 90%;
 `;
 
 interface TodoProps {
@@ -79,7 +107,7 @@ const Todo = ({ todo, onComplete }: TodoProps) => {
         $filled={todo.complete}
         onClick={() => onComplete(todo)}
       />
-      <div>{todo.text}</div>
+      <TodoText>{todo.text}</TodoText>
     </TodoWrapper>
   );
 };
@@ -88,6 +116,7 @@ const Todos = ({ todos, setTodos }: TodosProps) => {
   const [id, setId] = useState<number>(0);
   const [text, setText] = useState("");
   const [seed, setSeed] = useState<number>(0);
+  const [isFilled, setIsFilled] = useState<boolean>(false);
 
   const reset = () => {
     setSeed(Math.random());
@@ -99,25 +128,24 @@ const Todos = ({ todos, setTodos }: TodosProps) => {
   };
 
   const addTodo = (text: string) => {
-    console.log("Text: ", text);
+    if (text !== "") {
+      console.log("Text: ", text);
 
-    const newTodo: DisplayTodo = {
-      complete: false,
-      text: text,
-      id: id,
-    };
+      const newTodo: DisplayTodo = {
+        complete: isFilled,
+        text: text,
+        id: id,
+      };
 
-    setId(id + 1);
-    let newTodos = todos;
-    newTodos.push(newTodo);
-    setTodos(newTodos);
-    setText("");
+      setId(id + 1);
+      let newTodos = todos;
+      newTodos.push(newTodo);
+      setTodos(newTodos);
+      setText("");
+    }
   };
 
-  const editTodo = (todo: DisplayTodo) => {
-    let i = todos.findIndex((value) => value.id === todo.id);
-    let tempTodos = todos;
-  };
+  const editTodo = (todo: DisplayTodo) => {};
 
   const deleteTodo = (todo: DisplayTodo) => {};
 
@@ -138,13 +166,19 @@ const Todos = ({ todos, setTodos }: TodosProps) => {
 
   return (
     <TodoBox>
-      <form onSubmit={handleSubmit}>
-        <TodoInput
-          onChange={(e) => setText(e.target.value)}
-          value={text}
-          placeholder="Enter Task..."
+      <InputWrapper>
+        <CompleteButton
+          $filled={isFilled}
+          onClick={() => setIsFilled(!isFilled)}
         />
-      </form>
+        <TodoForm onSubmit={handleSubmit}>
+          <TodoInput
+            onChange={(e) => setText(e.target.value)}
+            value={text}
+            placeholder="Enter Task..."
+          />
+        </TodoForm>
+      </InputWrapper>
       <TodoContainer>
         {todos.map((todo) => (
           <Todo

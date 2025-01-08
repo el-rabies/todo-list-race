@@ -1,26 +1,70 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import Timer from "./Timer";
 import Todos, { DisplayTodo } from "./Todos";
+import closeIcon from "./icons/reset-icon.webp";
+import resetIcon from "./icons/reload-icon.png";
+
+const GlobalStyles = createGlobalStyle`
+html,
+body {
+  background-color: #f8f8f8;
+  color: #000;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+`;
 
 const PageBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
   gap: 16px;
 `;
 
+const PageHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: white;
+  border: 1px solid lightgray;
+  padding: 24px;
+`;
+
+const PageBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 90%;
+  min-height: 70vh;
+  height: 100%;
+  padding: 16px;
+  gap: 16px;
+  background-color: white;
+  border: 1px solid lightgray;
+`;
+
 const PageTitle = styled.div`
-  font-size: 24px;
+  font-size: 45px;
   font-weight: 600;
 `;
 
 const WinPopup = styled.div`
+  min-width: fit-content;
   width: 25%;
-  height: 50%;
   background-color: forestgreen;
   position: absolute;
   display: flex;
@@ -30,11 +74,13 @@ const WinPopup = styled.div`
   bottom: auto;
   border-radius: 5px;
   border: 4px solid darkgreen;
+  padding: 16px;
+  gap: 8px;
 `;
 
 const LosePopup = styled.div`
+  min-width: fit-content;
   width: 25%;
-  height: 50%;
   background-color: crimson;
   position: absolute;
   display: flex;
@@ -46,6 +92,14 @@ const LosePopup = styled.div`
   bottom: auto;
   border-radius: 5px;
   border: 4px solid darkred;
+  padding: 16px;
+  gap: 8px;
+`;
+
+const Button = styled.button`
+  filter: grayscale(100%) brightness(0%);
+  border: 0px;
+  background: transparent;
 `;
 
 function App() {
@@ -54,6 +108,9 @@ function App() {
   const [timer, setTimer] = useState(0);
   const [started, setStarted] = useState(false);
   const [todos, setTodos] = useState<DisplayTodo[]>([]);
+
+  let winSong = new Audio("./audio/happy-logo.wav");
+  let loseSong = new Audio("./audio/violin-lose.wav");
 
   //Handle Time Ending
   useEffect(() => {
@@ -74,10 +131,12 @@ function App() {
         todos.filter((todo) => todo.complete).length === todos.length
       ) {
         setWinFlags([false, true, false]);
-        setStarted(false)
+        setStarted(false);
+        winSong.play();
       } else if (winFlags[0] && timer === 0) {
         setWinFlags([false, false, true]);
-        setStarted(false)
+        setStarted(false);
+        loseSong.play();
       }
     }
   }, [timer]);
@@ -89,34 +148,45 @@ function App() {
   };
 
   return (
-    <PageBox>
-      {winFlags[1] && (
-        <WinPopup>
-          You Win!
-          <button onClick={() => setWinFlags([false, false, false])}>
-            close
-          </button>
-          <button onClick={reset}>Reset?</button>
-        </WinPopup>
-      )}
-      {winFlags[2] && (
-        <LosePopup>
-          You Lose!
-          <button onClick={() => setWinFlags([false, false, false])}>
-            Close
-          </button>
-          <button onClick={reset}>Reset?</button>
-        </LosePopup>
-      )}
-      <PageTitle>Task Race</PageTitle>
-      <Timer
-        timer={timer}
-        setTimer={setTimer}
-        started={started}
-        setStarted={setStarted}
-      />
-      <Todos todos={todos} setTodos={setTodos} />
-    </PageBox>
+    <>
+      <GlobalStyles />
+      <PageBox>
+        {winFlags[1] && (
+          <WinPopup>
+            You Win!
+            <Button onClick={() => setWinFlags([false, false, false])}>
+              <img src={closeIcon} height={40} width={40} alt="close" />
+            </Button>
+            <Button onClick={reset}>
+              <img src={resetIcon} height={40} width={40} alt="reset" />
+            </Button>
+          </WinPopup>
+        )}
+        {winFlags[2] && (
+          <LosePopup>
+            You Lose!
+            <Button onClick={() => setWinFlags([false, false, false])}>
+              <img src={closeIcon} height={40} width={40} alt="close" />
+            </Button>
+            <Button onClick={reset}>
+              <img src={resetIcon} height={40} width={40} alt="reset" />
+            </Button>
+          </LosePopup>
+        )}
+        <PageHeader>
+          <PageTitle>Task Race!</PageTitle>
+        </PageHeader>
+        <PageBody>
+          <Timer
+            timer={timer}
+            setTimer={setTimer}
+            started={started}
+            setStarted={setStarted}
+          />
+          <Todos todos={todos} setTodos={setTodos} />
+        </PageBody>
+      </PageBox>
+    </>
   );
 }
 
