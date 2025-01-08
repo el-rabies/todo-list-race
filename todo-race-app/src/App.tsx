@@ -31,6 +31,7 @@ const PageBox = styled.div`
   align-items: center;
   justify-content: center;
   gap: 16px;
+  overflow: hidden;
 `;
 
 const PageHeader = styled.div`
@@ -56,6 +57,18 @@ const PageBody = styled.div`
   background-color: white;
   border: 1px solid lightgray;
 `;
+
+const PageFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #7b7b7b;
+  justify-content: center;
+  width: 100%;
+  background-color: white;
+  border: 1px solid lightgray;
+  padding: 24px;
+`
 
 const PageTitle = styled.div`
   font-size: 45px;
@@ -175,7 +188,7 @@ function App() {
           </LosePopup>
         )}
         <PageHeader>
-          <PageTitle>Task Race!</PageTitle>
+          <PageTitle>Task Car!</PageTitle>
         </PageHeader>
         <PageBody>
           <Timer
@@ -186,6 +199,10 @@ function App() {
           />
           <Todos todos={todos} setTodos={setTodos} />
         </PageBody>
+        <PageFooter>
+          <div>Instuctions: </div>
+          <div>Write down the tasks you want then set the timer and get it done!</div>
+        </PageFooter>
       </PageBox>
     </>
   );
